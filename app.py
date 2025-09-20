@@ -25,7 +25,7 @@ if option == "Image":
     if uploaded_img:
         img = Image.open(uploaded_img)
         img_array = np.array(img)
-
+        img_array = cv2.resize(img_array, (640, 640))
         results = model(img_array)
         annotated_img = results[0].plot()
 
