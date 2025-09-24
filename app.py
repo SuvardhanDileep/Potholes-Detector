@@ -25,7 +25,7 @@ if option == "Image":
     if uploaded_img:
         img = Image.open(uploaded_img)
         img_array = np.array(img)
-        img_array = cv2.resize(img_array, (640, 640))
+        img_array = cv2.resize(img_array, (320, 320))
         results = model(img_array)
         annotated_img = results[0].plot()
 
@@ -40,13 +40,20 @@ elif option == "Video":
         
         cap = cv2.VideoCapture(tfile.name)
         stframe = st.empty()
+        
+        frame_count = 0
 
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
                 break
+            
+            frame_count +=1
+            if frame_count % 3!=0:
+                continue
 
-            frame = cv2.resize(frame, (640, 640))
+
+            frame = cv2.resize(frame, (320, 320))
             results = model(frame)
             annotated_frame = results[0].plot()
 
@@ -62,12 +69,18 @@ elif option == "Webcam":
 
     cap = cv2.VideoCapture(0)
 
+    frame_count = 0
+
     while run:
         ret, frame = cap.read()
         if not ret:
             break
 
-        frame = cv2.resize(frame, (640, 640))
+        frame_count +=1
+        if frame_count % 3!=0:
+            continue
+
+        frame = cv2.resize(frame, (320, 320))
         results = model(frame)
         annotated_frame = results[0].plot()
 
